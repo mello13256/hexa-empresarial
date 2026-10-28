@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Hexa Empresarial Edition — todo o texto da interface, em português de Portugal (pt-PT, AO90).
+    Não utilizar termos do português do Brasil (tela, aplicativo, celular, salvar, deletar, arquivo…).
+-->
+<resources>
+
+    <!-- Marca -->
+    <string name="app_name" translatable="false">Hexa Empresarial Edition</string>
+    <string name="brand_word" translatable="false">HEXA</string>
+    <string name="brand_edition" translatable="false">EMPRESARIAL EDITION</string>
+    <string name="brand_full_name" translatable="false">Hexa Empresarial Edition</string>
+
+    <!-- Serviço de acessibilidade -->
+    <string name="accessibility_service_label">Ações do sistema do Hexa</string>
+    <string name="accessibility_service_summary">Permite abrir as notificações, as definições rápidas, as aplicações recentes e bloquear o ecrã através dos gestos do Hexa.</string>
+    <string name="accessibility_service_description">Este serviço só é usado quando um gesto configurado no Hexa Empresarial Edition pede uma ação do sistema (notificações, definições rápidas, aplicações recentes ou bloqueio do ecrã). Não lê o conteúdo do ecrã nem recolhe dados.</string>
+
+    <!-- Mensagens -->
+    <string name="msg_action_failed">Não foi possível concluir a ação.</string>
+    <string name="msg_added_group">Adicionada ao grupo.</string>
+    <string name="msg_added_home">Adicionada ao ecrã inicial.</string>
+    <string name="msg_app_hidden">Aplicação ocultada. Pode voltar a mostrá-la nas definições da gaveta.</string>
+    <string name="msg_app_not_installed">Esta aplicação já não está instalada.</string>
+    <string name="msg_app_unavailable">Esta aplicação está indisponível de momento.</string>
+    <string name="msg_dock_full">A dock está cheia.</string>
+    <string name="msg_done">Concluído.</string>
+    <string name="msg_gesture_no_app">Escolha uma aplicação para este gesto nas definições.</string>
+    <string name="msg_no_space">Não há espaço livre nesta página.</string>
+    <string name="msg_shortcut_failed">Não foi possível abrir o atalho.</string>
+    <string name="msg_state_recovered">A configuração guardada estava danificada e foi recuperada a partir da última cópia válida.</string>
+    <string name="msg_too_many_pages">Atingiu o número máximo de páginas.</string>
+    <string name="msg_widget_cancelled">O widget não foi adicionado.</string>
+    <string name="msg_widget_not_allowed">É necessária autorização para adicionar este widget.</string>
+    <string name="msg_widget_provider_missing">A aplicação deste widget já não está instalada.</string>
+
+    <!-- Ações -->
+    <string name="action_add_page">Adicionar página</string>
+    <string name="action_add_to_dock">Adicionar à dock</string>
+    <string name="action_add_to_group">Adicionar a um grupo</string>
+    <string name="action_add_to_home">Adicionar ao ecrã inicial</string>
+    <string name="action_add_widget">Adicionar widget</string>
+    <string name="action_all_apps_grid">Todas as aplicações (grelha)</string>
+    <string name="action_app_info">Informações da aplicação</string>
+    <string name="action_back">Voltar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_clear_search">Limpar pesquisa</string>
+    <string name="action_close">Fechar</string>
+    <string name="action_close_drawer">Fechar a gaveta</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_done">Concluir</string>
+    <string name="action_edit_group">Editar grupo</string>
+    <string name="action_edit_home">Editar ecrã inicial</string>
+    <string name="action_favorite">Adicionar aos favoritos</string>
+    <string name="action_hide_app">Ocultar aplicação</string>
+    <string name="action_move_down">Mover para baixo</string>
+    <string name="action_move_up">Mover para cima</string>
+    <string name="action_new_group">Novo grupo</string>
+    <string name="action_ok">OK</string>
+    <string name="action_open_group">Abrir grupo</string>
+    <string name="action_open_settings">Definições</string>
+    <string name="action_orbit_closer">Aproximar do centro</string>
+    <string name="action_orbit_further">Afastar do centro</string>
+    <string name="action_remove">Remover</string>
+    <string name="action_remove_from_dock">Remover da dock</string>
+    <string name="action_reset">Repor</string>
+    <string name="action_resize">Redimensionar</string>
+    <string name="action_restore_widget">Voltar a adicionar o widget</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_show">Mostrar</string>
+    <string name="action_unfavorite">Remover dos favoritos</string>
+    <string name="action_uninstall">Desinstalar</string>
+
+    <!-- Acessibilidade (descrições) -->
+    <string name="a11y_app_missing">%1$s (não instalada)</string>
+    <string name="a11y_dock_empty">Posição livre da dock</string>
+    <string name="a11y_page_indicator">Página %1$d de %2$d</string>
+    <string name="a11y_resize_handle">Arrastar para redimensionar</string>
+
+    <!-- Aplicações -->
+    <string name="app_hidden_suffix">oculta</string>
+    <string name="app_unavailable_suffix">indisponível</string>
+    <string name="app_work_suffix">trabalho</string>
+    <string name="app_work_profile">%1$s (trabalho)</string>
+
+    <plurals name="app_count">
+        <item quantity="one">%d aplicação</item>
+        <item quantity="many">%d aplicações</item>
+        <item quantity="other">%d aplicações</item>
+    </plurals>
+    <plurals name="selected_apps">
+        <item quantity="one">%d aplicação selecionada</item>
+        <item quantity="many">%d aplicações selecionadas</item>
+        <item quantity="other">%d aplicações selecionadas</item>
+    </plurals>
+
+    <!-- Ecrã inicial -->
+    <string name="edit_mode_title">A editar o ecrã inicial</string>
+    <string name="item_clock">Relógio e data</string>
+    <string name="item_search_bar">Barra de pesquisa</string>
+    <string name="page_number">Página %1$d</string>
+    <string name="page_delete">Eliminar página</string>
+    <string name="page_is_default">Página principal</string>
+    <string name="page_make_default">Definir como página principal</string>
+    <string name="page_move_left">Mover página para a esquerda</string>
+    <string name="page_move_right">Mover página para a direita</string>
+    <string name="dock_choose_app">Escolher aplicação para a dock</string>
+
+    <!-- Gaveta e pesquisa -->
+    <string name="drawer_empty">Não há aplicações para mostrar.</string>
+    <string name="drawer_view_orbital">Orbital</string>
+    <string name="drawer_view_grid">Grelha</string>
+    <string name="search_apps_hint">Pesquisar aplicações</string>
+    <string name="search_no_results">Sem resultados para «%1$s».</string>
+
+    <!-- Grupos -->
+    <string name="group_animation_speed">Velocidade da animação</string>
+    <string name="group_apps">Aplicações</string>
+    <string name="group_center">Elemento central</string>
+    <string name="group_choose_apps">Escolher aplicações</string>
+    <string name="group_default_name">Grupo</string>
+    <string name="group_edit_title">Editar grupo</string>
+    <string name="group_empty">Este grupo ainda não tem aplicações.</string>
+    <string name="group_empty_hint">Adicione aplicações para o grupo aparecer completo no ecrã inicial.</string>
+    <string name="group_name">Nome do grupo</string>
+    <string name="group_new_title">Novo grupo</string>
+    <string name="group_open_center">No centro do ecrã</string>
+    <string name="group_open_in_place">No próprio lugar</string>
+    <string name="group_open_mode">Abertura</string>
+    <string name="group_shape">Forma</string>
+    <string name="group_size">Tamanho</string>
+    <string name="groups_intro">Os grupos reúnem várias aplicações num só elemento do ecrã inicial, com uma forma à sua escolha.</string>
+    <string name="groups_none">Ainda não criou nenhum grupo.</string>
+
+    <string name="shape_circle">Círculo</string>
+    <string name="shape_grid">Grelha</string>
+    <string name="shape_hexagon">Hexágono</string>
+    <string name="shape_radial">Radial</string>
+    <string name="shape_spiral">Espiral</string>
+    <string name="shape_rounded_square">Quadrado arredondado</string>
+    <string name="shape_squircle">Superelipse</string>
+    <string name="shape_system">Do sistema</string>
+
+    <string name="size_small">Pequeno</string>
+    <string name="size_medium">Médio</string>
+    <string name="size_large">Grande</string>
+
+    <string name="symbol_diamond">Losango</string>
+    <string name="symbol_hexagon">Hexágono</string>
+    <string name="symbol_monogram">Monograma H</string>
+    <string name="symbol_network">Rede</string>
+    <string name="symbol_orbit">Órbita</string>
+
+    <string name="center_kind">Tipo de elemento central</string>
+    <string name="center_symbol">Símbolo</string>
+    <string name="center_app_icon">Ícone de aplicação</string>
+    <string name="center_image">Imagem</string>
+    <string name="center_none">Nenhum</string>
+    <string name="center_change_image">Alterar imagem</string>
+
+    <!-- Widgets -->
+    <string name="widgets_title">Widgets</string>
+    <string name="widgets_hint">Toque num widget para o colocar na página atual.</string>
+    <string name="widgets_search">Pesquisar widgets</string>
+    <string name="widgets_none">Não foram encontrados widgets.</string>
+    <string name="widgets_intro">Para adicionar um widget, mantenha premido o ecrã inicial e escolha «Adicionar widget». Aqui pode ver e remover os widgets colocados.</string>
+    <string name="widgets_none_placed">Ainda não há widgets no ecrã inicial.</string>
+    <string name="widgets_limits">Para redimensionar um widget, mantenha-o premido no modo de edição e arraste o canto. Alguns widgets têm tamanhos fixos definidos pela aplicação.</string>
+    <string name="widget_generic">Widget</string>
+    <string name="widget_info">Página %1$d · %2$d × %3$d</string>
+    <string name="widget_info_restore">Página %1$d · %2$d × %3$d · por restaurar</string>
+    <string name="widget_restore_placeholder">%1$s — toque para voltar a adicionar</string>
+
+    <!-- Definições: geral -->
+    <string name="settings_title">Definições</string>
+    <string name="settings_footer">Hexa Empresarial Edition · versão %1$s</string>
+    <string name="default_home_title">Definir como ecrã principal</string>
+    <string name="default_home_text">O Hexa Empresarial Edition ainda não é a aplicação de ecrã principal. Algumas funções, como os atalhos das aplicações, só ficam disponíveis depois de o escolher.</string>
+    <string name="default_home_action">Escolher o Hexa</string>
+    <string name="status_on">Ativo</string>
+    <string name="status_off">Inativo</string>
+
+    <string name="cat_home">Ecrã inicial</string>
+    <string name="cat_home_summary">Grelha, páginas, relógio e barra de pesquisa</string>
+    <string name="cat_icons">Ícones</string>
+    <string name="cat_icons_summary">Tamanho, forma, estilo, etiquetas e pacotes de ícones</string>
+    <string name="cat_dock">Dock</string>
+    <string name="cat_dock_summary">Posições, tamanho, fundo e estilo</string>
+    <string name="cat_drawer">Gaveta de aplicações</string>
+    <string name="cat_drawer_summary">Vista predefinida, ordenação e aplicações ocultas</string>
+    <string name="cat_orbital">Interface orbital</string>
+    <string name="cat_orbital_summary">Órbitas, centro, cores e organização</string>
+    <string name="cat_groups">Grupos</string>
+    <string name="cat_groups_summary">Criar e editar grupos de aplicações</string>
+    <string name="cat_widgets">Widgets</string>
+    <string name="cat_widgets_summary">Widgets colocados no ecrã inicial</string>
+    <string name="cat_gestures">Gestos</string>
+    <string name="cat_gestures_summary">Deslizar, toque duplo e botão inicial</string>
+    <string name="cat_appearance">Aparência</string>
+    <string name="cat_appearance_summary">Tema, cor de destaque, contraste e fundo</string>
+    <string name="cat_animations">Animações</string>
+    <string name="cat_animations_summary">Ativar e ajustar a duração</string>
+    <string name="cat_backups">Cópias de segurança</string>
+    <string name="cat_backups_summary">Exportar e importar a configuração</string>
+    <string name="cat_advanced">Definições avançadas</string>
+    <string name="cat_advanced_summary">Repor, limpar dados temporários e estado</string>
+
+    <!-- Definições: ecrã inicial -->
+    <string name="home_grid">Grelha</string>
+    <string name="home_columns">Colunas</string>
+    <string name="home_rows">Linhas</string>
+    <string name="home_grid_hint">Ao reduzir a grelha, os elementos que deixam de caber passam para outras páginas; nenhum é removido.</string>
+    <string name="home_default_page">Página principal</string>
+    <string name="home_elements">Elementos</string>
+    <string name="home_edit_hint">Mantenha premido o ecrã inicial para entrar no modo de edição: arraste elementos, adicione widgets, grupos e páginas.</string>
+    <string name="clock_section">Relógio</string>
+    <string name="clock_show_time">Mostrar a hora</string>
+    <string name="clock_show_weekday">Mostrar o dia da semana</string>
+    <string name="clock_show_date">Mostrar a data</string>
+    <string name="clock_show_card">Mostrar em cartão</string>
+    <string name="clock_format">Formato da hora</string>
+    <string name="clock_format_system">Do sistema</string>
+    <string name="clock_format_24">24 horas</string>
+    <string name="clock_format_12">12 horas</string>
+
+    <!-- Definições: ícones -->
+    <string name="icons_size">Tamanho dos ícones</string>
+    <string name="icons_spacing">Espaçamento</string>
+    <string name="icons_shape">Forma</string>
+    <string name="icons_shape_hint">Aplica-se aos ícones adaptativos; os restantes são mostrados dentro da forma escolhida.</string>
+    <string name="icons_style">Estilo</string>
+    <string name="icons_style_hint">O estilo monocromático usa o ícone temático da aplicação quando existe (Android 13 ou posterior).</string>
+    <string name="style_original">Original</string>
+    <string name="style_monochrome">Monocromático</string>
+    <string name="style_gold">Dourado</string>
+    <string name="icons_pack">Pacote de ícones</string>
+    <string name="icons_pack_none">Nenhum (ícones das aplicações)</string>
+    <string name="icons_pack_empty">Não foi encontrado nenhum pacote de ícones instalado.</string>
+    <string name="icons_pack_hint">As aplicações sem ícone no pacote mantêm o ícone original.</string>
+    <string name="icons_labels">Etiquetas</string>
+    <string name="icons_show_labels">Mostrar etiquetas</string>
+    <string name="icons_label_size">Tamanho do texto</string>
+    <string name="icons_label_lines">Linhas de texto</string>
+    <string name="icons_alignment">Alinhamento</string>
+    <string name="align_center">Centrado</string>
+    <string name="align_start">À esquerda</string>
+    <string name="icons_rows_cols_hint">O número de linhas e colunas do ecrã inicial está em Ecrã inicial › Grelha.</string>
+
+    <!-- Definições: dock -->
+    <string name="dock_enabled">Mostrar a dock</string>
+    <string name="dock_positions">Posições</string>
+    <string name="dock_icon_size">Tamanho dos ícones</string>
+    <string name="dock_spacing">Espaçamento</string>
+    <string name="dock_margin">Margem lateral</string>
+    <string name="dock_background">Fundo</string>
+    <string name="dock_background_opacity">Opacidade do fundo</string>
+    <string name="dock_style">Estilo</string>
+    <string name="dock_style_gold">Medalhão dourado</string>
+    <string name="dock_style_silver">Medalhão prateado</string>
+    <string name="dock_style_plain">Ícones originais</string>
+    <string name="dock_labels">Mostrar etiquetas</string>
+    <string name="dock_all_apps">Botão de todas as aplicações</string>
+    <string name="dock_all_apps_hint">Botão quadrado que abre a gaveta em grelha.</string>
+    <string name="dock_hint">Para trocar as aplicações da dock, arraste-as no modo de edição ou toque numa posição livre.</string>
+
+    <!-- Definições: gaveta -->
+    <string name="drawer_default_view">Vista predefinida</string>
+    <string name="drawer_view_hint">Na gaveta, o botão redondo mostra a vista orbital e o botão quadrado a grelha. A última escolha é memorizada.</string>
+    <string name="drawer_sort">Ordenação</string>
+    <string name="sort_alpha">Alfabética</string>
+    <string name="sort_usage">Mais utilizadas</string>
+    <string name="sort_manual">Manual</string>
+    <string name="drawer_grid_columns">Colunas da grelha</string>
+    <string name="drawer_grid_labels">Etiquetas na grelha</string>
+    <string name="drawer_auto_keyboard">Abrir o teclado ao pesquisar</string>
+    <string name="drawer_opacity">Opacidade do fundo</string>
+    <string name="drawer_hidden_apps">Aplicações ocultas</string>
+    <string name="drawer_hidden_none">Não há aplicações ocultas.</string>
+    <string name="drawer_manual_order">Ordem manual</string>
+    <string name="drawer_manual_order_hint">Os favoritos e as aplicações prioritárias aparecem sempre primeiro.</string>
+
+    <!-- Definições: interface orbital -->
+    <string name="orbital_preview">Pré-visualização da interface orbital</string>
+    <string name="orbital_geometry">Geometria</string>
+    <string name="orbital_count">Número máximo de órbitas</string>
+    <string name="orbital_spacing">Espaçamento entre órbitas</string>
+    <string name="orbital_spacing_hint">Nunca é inferior ao necessário para que os ícones não se sobreponham.</string>
+    <string name="orbital_max_radius">Raio máximo</string>
+    <string name="orbital_icon_size">Tamanho dos ícones</string>
+    <string name="orbital_center_size">Tamanho do centro</string>
+    <string name="orbital_min_gap">Distância mínima entre ícones</string>
+    <string name="orbital_appearance">Aparência</string>
+    <string name="orbital_show_lines">Mostrar as linhas das órbitas</string>
+    <string name="orbital_line_color">Cor das linhas</string>
+    <string name="orbital_opacity">Opacidade das linhas</string>
+    <string name="orbital_decorative">Anéis decorativos</string>
+    <string name="orbital_background">Fundo</string>
+    <string name="bg_theme">Segue o tema</string>
+    <string name="bg_graphite">Grafite</string>
+    <string name="bg_black">Preto profundo</string>
+    <string name="bg_gradient">Gradiente executivo</string>
+    <string name="bg_wallpaper">Fundo do ecrã escurecido</string>
+    <string name="orbital_icon_backdrop">Fundo dos ícones</string>
+    <string name="backdrop_dark">Disco escuro</string>
+    <string name="backdrop_light">Disco claro</string>
+    <string name="backdrop_gold">Disco dourado</string>
+    <string name="backdrop_none">Sem fundo</string>
+    <string name="orbital_shadows">Sombras</string>
+    <string name="orbital_opening">Animação de abertura</string>
+    <string name="orbital_opening_hint">Primeiro surgem os anéis, depois os ícones ocupam as posições e, por fim, o centro é realçado.</string>
+    <string name="opening_radial">Radial</string>
+    <string name="opening_perspective">Perspetiva</string>
+    <string name="opening_fade">Desvanecer</string>
+    <string name="orbital_organization">Organização</string>
+    <string name="orbital_distribution">Distribuição</string>
+    <string name="orbital_distribution_hint">Na distribuição manual, use «Aproximar do centro» e «Afastar do centro» no menu de cada ícone.</string>
+    <string name="distribution_auto">Automática</string>
+    <string name="distribution_manual">Manual</string>
+    <string name="orbital_favorites">Favoritos</string>
+    <string name="orbital_favorites_hint">Ficam na órbita mais próxima do centro.</string>
+    <string name="orbital_priority">Prioritárias</string>
+    <string name="orbital_priority_hint">Aparecem logo a seguir aos favoritos.</string>
+    <string name="orbital_hidden_hint">As aplicações ocultas não aparecem na interface orbital, mas continuam acessíveis pela pesquisa.</string>
+    <string name="orbital_center">Elemento central</string>
+
+    <!-- Definições: gestos -->
+    <string name="gestures_intro">Escolha o que acontece com cada gesto no ecrã inicial.</string>
+    <string name="gesture_swipe_up">Deslizar para cima</string>
+    <string name="gesture_swipe_down">Deslizar para baixo</string>
+    <string name="gesture_double_tap">Toque duplo</string>
+    <string name="gesture_home_button">Botão inicial (já no ecrã inicial)</string>
+    <string name="gesture_long_press">Manter premido</string>
+    <string name="gesture_long_press_hint">Este gesto está sempre reservado ao modo de edição.</string>
+    <string name="gesture_none">Nenhuma ação</string>
+    <string name="gesture_open_drawer">Abrir a gaveta (vista memorizada)</string>
+    <string name="gesture_open_orbital">Abrir a interface orbital</string>
+    <string name="gesture_open_grid">Abrir a grelha de aplicações</string>
+    <string name="gesture_open_search">Pesquisar aplicações</string>
+    <string name="gesture_open_settings">Abrir as definições</string>
+    <string name="gesture_edit_home">Editar o ecrã inicial</string>
+    <string name="gesture_open_app">Abrir uma aplicação</string>
+    <string name="gesture_open_app_named">Abrir %1$s</string>
+    <string name="gesture_default_page">Ir para a página principal</string>
+    <string name="gesture_notifications">Mostrar as notificações</string>
+    <string name="gesture_quick_settings">Mostrar as definições rápidas</string>
+    <string name="gesture_lock_screen">Bloquear o ecrã</string>
+    <string name="gesture_recent_apps">Aplicações recentes</string>
+    <string name="gesture_needs_accessibility">Requer o serviço de acessibilidade do Hexa</string>
+    <string name="accessibility_section">Ações do sistema</string>
+    <string name="accessibility_needed_title">Ativar o serviço de acessibilidade</string>
+    <string name="accessibility_needed_text">As notificações, as definições rápidas, as aplicações recentes e o bloqueio do ecrã só podem ser abertos com a sua autorização, através do serviço de acessibilidade do Hexa. O serviço não lê o conteúdo do ecrã.</string>
+    <string name="accessibility_status">Serviço de acessibilidade</string>
+    <string name="accessibility_open_hint">Toque para abrir as definições de acessibilidade do Android.</string>
+
+    <!-- Definições: aparência -->
+    <string name="appearance_theme">Tema</string>
+    <string name="theme_system">Automático (sistema)</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="appearance_accent">Cor de destaque</string>
+    <string name="appearance_contrast">Contraste</string>
+    <string name="contrast_standard">Normal</string>
+    <string name="contrast_medium">Médio</string>
+    <string name="contrast_high">Elevado</string>
+    <string name="appearance_surface_opacity">Opacidade das superfícies</string>
+    <string name="appearance_surface_hint">Cartões, barra de pesquisa e menus sobre o fundo.</string>
+    <string name="appearance_corners">Arredondamento dos cantos</string>
+    <string name="appearance_logo">Logótipo</string>
+    <string name="logo_drawer">No topo da gaveta</string>
+    <string name="logo_home">No topo do ecrã inicial</string>
+    <string name="logo_hidden">Oculto</string>
+    <string name="appearance_wallpaper">Fundo</string>
+    <string name="appearance_wallpaper_mode">Tipo de fundo</string>
+    <string name="wallpaper_system">Imagem de fundo do sistema</string>
+    <string name="wallpaper_gradient">Gradiente executivo</string>
+    <string name="wallpaper_solid">Cor sólida</string>
+    <string name="wallpaper_image">Imagem própria</string>
+    <string name="wallpaper_change_image">Escolher outra imagem</string>
+    <string name="wallpaper_color">Cor do fundo</string>
+    <string name="appearance_scrim">Escurecimento do fundo</string>
+    <string name="appearance_scrim_hint">Melhora a legibilidade do texto sobre imagens claras.</string>
+    <string name="appearance_system_wallpaper_hint">A imagem de fundo do sistema altera-se nas definições do Android; o Hexa apenas a mostra.</string>
+
+    <string name="color_gold">Dourado</string>
+    <string name="color_champagne">Champanhe</string>
+    <string name="color_bronze">Bronze</string>
+    <string name="color_silver">Prateado</string>
+    <string name="color_platinum">Platina</string>
+    <string name="color_steel_blue">Azul-aço</string>
+    <string name="color_white">Branco</string>
+    <string name="color_rose_grey">Cinzento-rosado</string>
+    <string name="color_graphite">Grafite</string>
+    <string name="color_black">Preto</string>
+    <string name="color_navy">Azul-marinho</string>
+    <string name="color_warm_grey">Cinzento quente</string>
+    <string name="color_soft_white">Branco suave</string>
+
+    <!-- Definições: animações -->
+    <string name="animations_enabled">Animações</string>
+    <string name="animations_enabled_hint">Desative para transições imediatas. A opção «Remover animações» do Android também é respeitada.</string>
+    <string name="animations_duration">Duração</string>
+    <string name="animations_duration_hint">Valores menores tornam as animações mais rápidas.</string>
+    <string name="animations_groups_hint">Cada grupo pode ter a sua própria velocidade de abertura, definida no editor do grupo.</string>
+
+    <!-- Definições: cópias de segurança -->
+    <string name="backup_export_section">Exportar</string>
+    <string name="backup_export_text">Guarda num ficheiro a disposição do ecrã inicial, a dock, os grupos e todas as definições.</string>
+    <string name="backup_export">Exportar configuração</string>
+    <string name="backup_export_done">A cópia de segurança foi guardada.</string>
+    <string name="backup_export_failed">Não foi possível guardar o ficheiro.</string>
+    <string name="backup_import_section">Importar</string>
+    <string name="backup_import_text">O ficheiro é verificado antes de ser aplicado. Antes de substituir a configuração atual, é-lhe pedida confirmação.</string>
+    <string name="backup_import">Importar configuração</string>
+    <string name="backup_import_done">A configuração foi importada.</string>
+    <string name="backup_limits_section">Limitações</string>
+    <string name="backup_limit_widgets">Os widgets não podem ser transferidos entre instalações: ficam marcados no ecrã inicial e basta tocar para os voltar a adicionar.</string>
+    <string name="backup_limit_images">As imagens próprias (fundo e elementos centrais) não são incluídas no ficheiro.</string>
+    <string name="backup_limit_apps">As aplicações que não estejam instaladas neste dispositivo ficam assinaladas até serem instaladas.</string>
+    <string name="backup_limit_privacy">O ficheiro contém apenas a configuração do Hexa, sem dados pessoais nem dados de utilização.</string>
+    <string name="backup_title_ok">Concluído</string>
+    <string name="backup_title_error">Erro</string>
+    <string name="backup_title_invalid">Ficheiro inválido</string>
+    <string name="backup_error_read">Não foi possível ler o ficheiro, ou o ficheiro é demasiado grande.</string>
+    <string name="backup_error_not_json">O ficheiro não está num formato legível.</string>
+    <string name="backup_error_format">Este ficheiro não é uma cópia de segurança do Hexa Empresarial Edition.</string>
+    <string name="backup_error_version">Esta cópia de segurança foi criada por uma versão mais recente. Atualize a aplicação e tente novamente.</string>
+    <string name="backup_error_content">O conteúdo da cópia de segurança está danificado.</string>
+    <string name="backup_confirm_title">Substituir a configuração atual?</string>
+    <string name="backup_confirm_created">Criada em %1$s</string>
+    <string name="backup_date_unknown">data desconhecida</string>
+    <string name="backup_confirm_overwrite">A disposição e as definições atuais serão substituídas. Esta ação não pode ser anulada.</string>
+    <string name="backup_apply">Substituir</string>
+    <string name="backup_warn_widgets">Os widgets terão de ser adicionados novamente.</string>
+    <string name="backup_warn_images">As imagens próprias não estão incluídas.</string>
+    <string name="backup_warn_repaired">Alguns elementos inconsistentes foram corrigidos.</string>
+    <plurals name="backup_pages">
+        <item quantity="one">%d página</item>
+        <item quantity="many">%d páginas</item>
+        <item quantity="other">%d páginas</item>
+    </plurals>
+    <plurals name="backup_groups">
+        <item quantity="one">%d grupo</item>
+        <item quantity="many">%d grupos</item>
+        <item quantity="other">%d grupos</item>
+    </plurals>
+    <plurals name="backup_widgets">
+        <item quantity="one">%d widget</item>
+        <item quantity="many">%d widgets</item>
+        <item quantity="other">%d widgets</item>
+    </plurals>
+    <plurals name="backup_warn_missing">
+        <item quantity="one">%d aplicação não está instalada neste dispositivo.</item>
+        <item quantity="many">%d aplicações não estão instaladas neste dispositivo.</item>
+        <item quantity="other">%d aplicações não estão instaladas neste dispositivo.</item>
+    </plurals>
+
+    <!-- Definições avançadas -->
+    <string name="advanced_language">Idioma da interface</string>
+    <string name="advanced_language_value">Português (Portugal)</string>
+    <string name="advanced_language_hint">A interface usa sempre o português de Portugal, independentemente do idioma do sistema.</string>
+    <string name="advanced_clear_icons">Limpar a cache de ícones</string>
+    <string name="advanced_clear_icons_hint">Os ícones voltam a ser carregados. Útil depois de atualizar um pacote de ícones.</string>
+    <string name="advanced_reset_usage">Repor as estatísticas de utilização</string>
+    <string name="advanced_reset_usage_hint">Afeta a ordenação «Mais utilizadas». Os dados só existem neste dispositivo.</string>
+    <string name="advanced_reload_apps">Recarregar a lista de aplicações</string>
+    <string name="advanced_reload_apps_hint">Volta a consultar o sistema caso alguma aplicação não apareça.</string>
+    <string name="advanced_reset_section">Repor</string>
+    <string name="advanced_reset">Repor a configuração inicial</string>
+    <string name="advanced_reset_hint">Remove páginas, grupos e widgets e restaura todas as definições originais.</string>
+    <string name="advanced_reset_confirm_title">Repor a configuração inicial?</string>
+    <string name="advanced_reset_confirm_text">Todas as páginas, grupos, widgets e definições serão substituídos pela configuração original. Recomenda-se exportar primeiro uma cópia de segurança.</string>
+</resources>

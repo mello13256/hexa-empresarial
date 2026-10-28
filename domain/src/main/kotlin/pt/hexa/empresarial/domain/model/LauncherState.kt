@@ -200,7 +200,14 @@ data class DrawerSettings(
 )
 
 @Serializable
-enum class OrbitalBackground { DEEP_BLACK, GRAPHITE, GRADIENT, WALLPAPER_DIMMED }
+enum class OrbitalBackground {
+    /** Graphite in dark theme, soft white in light theme. */
+    THEME,
+    DEEP_BLACK,
+    GRAPHITE,
+    GRADIENT,
+    WALLPAPER_DIMMED,
+}
 
 @Serializable
 enum class IconBackdrop { NONE, DARK_DISC, LIGHT_DISC, GOLD_DISC }
@@ -226,14 +233,12 @@ data class OrbitalSettings(
     val lineColor: Long = 0xFFB8BCC2,
     val orbitOpacity: Float = 0.22f,
     val showLines: Boolean = true,
-    val background: OrbitalBackground = OrbitalBackground.GRAPHITE,
+    val background: OrbitalBackground = OrbitalBackground.THEME,
     val iconBackdrop: IconBackdrop = IconBackdrop.DARK_DISC,
     val shadows: Boolean = true,
     val center: CenterElement = CenterElement(),
     val distribution: OrbitalDistribution = OrbitalDistribution.AUTOMATIC,
     val opening: OrbitalOpening = OrbitalOpening.RADIAL,
-    /** Allow turning the orbits with a circular drag. */
-    val rotation: Boolean = true,
 ) {
     companion object {
         const val MIN_ORBITS = 1
