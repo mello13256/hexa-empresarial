@@ -1,5 +1,6 @@
 package pt.hexa.empresarial
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
@@ -93,5 +94,6 @@ class HomeFlowTest {
         assertEquals(DrawerView.ORBITAL, rule.activity.container.state.value.drawer.view)
         rule.onNodeWithContentDescription("Fechar a gaveta").performClick()
         rule.waitForIdle()
+        rule.onAllNodes(hasContentDescription("Grelha")).assertCountEquals(0)
     }
 }

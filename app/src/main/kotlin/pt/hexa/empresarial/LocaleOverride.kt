@@ -13,9 +13,8 @@ import java.util.Locale
 object LocaleOverride {
     val PT_PT: Locale = Locale.forLanguageTag("pt-PT")
 
-    fun wrap(base: Context): Context {
-        val config = Configuration(base.resources.configuration)
-        config.setLocales(LocaleList(PT_PT))
-        return base.createConfigurationContext(config)
-    }
+    fun wrap(base: Context): Context = base.createConfigurationContext(configuration(base.resources.configuration))
+
+    /** A copy of [base] with European Portuguese as the only locale. */
+    fun configuration(base: Configuration): Configuration = Configuration(base).apply { setLocales(LocaleList(PT_PT)) }
 }

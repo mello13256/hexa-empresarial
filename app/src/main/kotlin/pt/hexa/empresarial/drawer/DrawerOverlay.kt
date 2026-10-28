@@ -181,15 +181,14 @@ private fun Header(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Grab handle: swipe down here (or anywhere on the orbits) to close.
-        val handleDescription = stringResource(R.string.action_close_drawer)
+        // Grab handle: swipe down here (or anywhere on the orbits) to close. Purely visual; the
+        // close button below is the accessible way to close.
         Box(
             Modifier
                 .width(40.dp)
                 .height(4.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(fg.copy(alpha = 0.35f))
-                .semantics { contentDescription = handleDescription },
+                .background(fg.copy(alpha = 0.35f)),
         )
         if (state.appearance.logo == LogoPlacement.DRAWER_HEADER) {
             Spacer(Modifier.height(10.dp))

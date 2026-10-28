@@ -45,9 +45,14 @@ class ManifestAndLocaleTest {
     @Test
     @Config(qualifiers = "en-rUS")
     fun interfaceIsPortugueseEvenWithEnglishSystem() {
+        val system = app.resources.configuration
+        assertEquals("en", system.locales[0].language)
+        // The configuration applied to every UI context replaces the system language.
+        val config = LocaleOverride.configuration(system)
+        assertEquals(1, config.locales.size())
+        assertEquals("pt-PT", config.locales[0].toLanguageTag())
+        assertEquals(system.densityDpi, config.densityDpi)
         val ctx = LocaleOverride.wrap(app)
-        assertEquals("pt", ctx.resources.configuration.locales[0].language)
-        assertEquals("PT", ctx.resources.configuration.locales[0].country)
         assertEquals("Cancelar", ctx.getString(R.string.action_cancel))
         assertEquals("Ecrã inicial", ctx.getString(R.string.cat_home))
         // The application context itself is already wrapped.
