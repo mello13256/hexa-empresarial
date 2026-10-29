@@ -89,6 +89,7 @@ class HomeFlowTest {
         waitForHome()
         rule.onAllNodes(hasText("Pesquisar aplicações")).onFirst().performClick()
         rule.waitForIdle()
+        rule.waitUntil(5_000) { rule.onAllNodes(hasContentDescription("Grelha")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNode(hasContentDescription("Grelha")).performClick()
         rule.waitForIdle()
         assertEquals(DrawerView.GRID, rule.activity.container.state.value.drawer.view)

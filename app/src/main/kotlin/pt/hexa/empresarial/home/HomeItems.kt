@@ -237,7 +237,11 @@ fun ClockCell(settings: ClockSettings, surfaceOpacity: Float, modifier: Modifier
     }
 }
 
-/** Search entry on the home screen: dark pill with a thin metallic outline. */
+/**
+ * Search entry on the home screen: dark pill with a thin metallic outline. Touches are handled by
+ * the item gestures passed in [modifier] (tap opens, long press shows the menu and drags), so this
+ * only adds the accessibility action.
+ */
 @Composable
 fun SearchBarCell(surfaceOpacity: Float, onClick: () -> Unit, modifier: Modifier = Modifier) {
     val colors = HexaTheme.colors
@@ -250,8 +254,11 @@ fun SearchBarCell(surfaceOpacity: Float, onClick: () -> Unit, modifier: Modifier
             .clip(shape)
             .background(Color.Black.copy(alpha = surfaceOpacity))
             .border(1.dp, colors.metallic(), shape)
-            .clickable(onClick = onClick)
-            .semantics { contentDescription = hint; role = Role.Button }
+            .semantics {
+                contentDescription = hint
+                role = Role.Button
+                onClick { onClick(); true }
+            }
             .padding(horizontal = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
