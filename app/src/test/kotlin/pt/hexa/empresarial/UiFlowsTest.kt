@@ -9,9 +9,11 @@ import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -71,6 +73,9 @@ class HomeFlowTest {
     @get:Rule
     val rule = createAndroidComposeRule<HomeActivity>()
 
+    /** The semantics tree, attached to failures to show what was on screen. */
+    private fun screen() = rule.onRoot().printToString(maxDepth = 12)
+
     private fun waitForHome() {
         rule.waitUntil(15_000) { rule.activity.container.state.value.initialized }
         rule.waitUntil(15_000) { rule.onAllNodes(hasText("Pesquisar aplicações")).fetchSemanticsNodes().isNotEmpty() }
@@ -92,7 +97,7 @@ class HomeFlowTest {
         rule.waitUntil(5_000) { rule.onAllNodes(hasContentDescription("Grelha")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNode(hasContentDescription("Grelha")).performClick()
         rule.waitForIdle()
-        assertEquals(DrawerView.GRID, rule.activity.container.state.value.drawer.view)
+        assertEquals(screen(), DrawerView.GRID, rule.activity.container.state.value.drawer.view)
         rule.onNode(hasContentDescription("Orbital")).performClick()
         rule.waitForIdle()
         assertEquals(DrawerView.ORBITAL, rule.activity.container.state.value.drawer.view)
@@ -108,6 +113,7 @@ class HomeFlowTest {
         waitForHome()
         // Long press on the search bar, then "Editar ecrã inicial" from its menu.
         rule.onAllNodes(hasText("Pesquisar aplicações")).onFirst().performTouchInput { longClick() }
+        rule.waitUntil(5_000) { rule.onAllNodes(hasText("Editar ecrã inicial")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithText("Editar ecrã inicial").performClick()
         rule.waitForIdle()
         // Edit tools with labels at the bottom, page controls at the top.

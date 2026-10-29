@@ -104,6 +104,10 @@ fun Modifier.itemGestures(
         .pointerInput(key) {
             awaitEachGesture {
                 val down = awaitFirstDown(requireUnconsumed = true)
+                // The touch belongs to this item: the page underneath must not also see a long
+                // press on empty space (which enters edit mode and closed the item's menu).
+                // Swipes still reach the pager, which does not require an unconsumed down.
+                down.consume()
                 var finished = false
                 val up = withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis) {
                     val u = waitForUpOrCancellation()
