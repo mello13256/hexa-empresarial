@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.printToString
 import androidx.compose.ui.test.swipeUp
@@ -99,7 +100,15 @@ class HomeFlowTest {
         rule.waitUntil(5_000) { rule.onAllNodes(hasContentDescription("Grelha")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNode(hasContentDescription("Grelha")).performClick()
         rule.waitForIdle()
-        assertEquals(screen(), DrawerView.GRID, rule.activity.container.state.value.drawer.view)
+        val afterTouch = rule.activity.container.state.value.drawer.view
+        if (afterTouch != DrawerView.GRID) {
+            // Diagnosis: where did the touch go, and does the button itself work?
+            val started = org.robolectric.Shadows.shadowOf(rule.activity).nextStartedActivity?.action
+            rule.onNode(hasContentDescription("Grelha")).performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
+            rule.waitForIdle()
+            val afterSemantics = rule.activity.container.state.value.drawer.view
+            org.junit.Assert.fail("toque=$afterTouch actividade=$started semantica=$afterSemantics\n" + screen())
+        }
         rule.onNode(hasContentDescription("Orbital")).performClick()
         rule.waitForIdle()
         assertEquals(DrawerView.ORBITAL, rule.activity.container.state.value.drawer.view)
