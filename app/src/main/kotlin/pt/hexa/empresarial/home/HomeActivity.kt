@@ -12,6 +12,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import pt.hexa.empresarial.LocaleOverride
 import pt.hexa.empresarial.container
 import pt.hexa.empresarial.settings.SettingsActivity
@@ -22,7 +24,9 @@ import pt.hexa.empresarial.settings.SettingsActivity
  */
 class HomeActivity : ComponentActivity(), HomeHost {
 
-    private val vm: HomeViewModel by viewModels()
+    // Explicit factory bound to this activity's application: the default one keeps the first
+    // application it was given in a static instance.
+    private val vm: HomeViewModel by viewModels { viewModelFactory { initializer { HomeViewModel(application) } } }
 
     override val rootView: View get() = window.decorView
 
