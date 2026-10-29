@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.printToString
+import androidx.compose.ui.test.swipeUp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -92,7 +93,8 @@ class HomeFlowTest {
     @Test
     fun squareButtonSwitchesTheDrawerToTheGridAndIsRemembered() {
         waitForHome()
-        rule.onAllNodes(hasText("Pesquisar aplicações")).onFirst().performClick()
+        // Swipe up on empty space of the home screen, the usual way to open the drawer.
+        rule.onRoot().performTouchInput { swipeUp(startY = height * 0.7f, endY = height * 0.2f, durationMillis = 300) }
         rule.waitForIdle()
         rule.waitUntil(5_000) { rule.onAllNodes(hasContentDescription("Grelha")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNode(hasContentDescription("Grelha")).performClick()
