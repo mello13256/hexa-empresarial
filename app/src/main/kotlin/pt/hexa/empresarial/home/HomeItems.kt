@@ -144,9 +144,18 @@ fun Modifier.itemGestures(
 
 private val labelShadow = Shadow(Color.Black.copy(alpha = 0.6f), Offset(0f, 1.5f), 4f)
 
-/** App icon with optional label, as on any Android home screen. */
+/** App icon with optional label, as on any Android home screen. [badge] sits on the icon's corner. */
 @Composable
-fun AppCell(appKey: String, label: String, icons: IconSettings, missing: Boolean, modifier: Modifier = Modifier, showLabel: Boolean = icons.showLabels, labelColor: Color = Color.White) {
+fun AppCell(
+    appKey: String,
+    label: String,
+    icons: IconSettings,
+    missing: Boolean,
+    modifier: Modifier = Modifier,
+    showLabel: Boolean = icons.showLabels,
+    labelColor: Color = Color.White,
+    badge: (@Composable () -> Unit)? = null,
+) {
     val description = if (missing) stringResource(R.string.a11y_app_missing, label) else label
     Column(
         modifier
@@ -163,6 +172,7 @@ fun AppCell(appKey: String, label: String, icons: IconSettings, missing: Boolean
                     Text("?", color = Color.White, style = HexaType.label.copy(fontSize = 20.sp))
                 }
             }
+            if (badge != null) Box(Modifier.align(Alignment.TopStart).offset((-12).dp, (-12).dp)) { badge() }
         }
         if (showLabel) {
             Spacer(Modifier.height(4.dp))
@@ -253,25 +263,28 @@ fun SearchBarCell(surfaceOpacity: Float, onClick: () -> Unit, modifier: Modifier
 
 /** Compact group: the centre element with up to six app icons around it, and the group name. */
 @Composable
-fun GroupCell(group: AppGroup, icons: IconSettings, modifier: Modifier = Modifier) {
+fun GroupCell(group: AppGroup, icons: IconSettings, modifier: Modifier = Modifier, badge: (@Composable () -> Unit)? = null) {
     val colors = HexaTheme.colors
     val size = icons.sizeDp.dp
     Column(modifier.fillMaxSize().padding(icons.spacingDp.dp / 2), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-        Box(
-            Modifier
-                .size(size)
-                .clip(CircleShape)
-                .background(Color.Black.copy(alpha = 0.55f))
-                .border(1.dp, colors.metallic(), CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            CenterView(group.center, size * 0.42f)
-            val shown = group.appKeys.take(6)
-            shown.forEachIndexed { i, key ->
-                val a = -Math.PI / 2 + i * 2 * Math.PI / shown.size.coerceAtLeast(1)
-                val r = size.value * 0.34f
-                AppIcon(key, size * 0.26f, icons, Modifier.offset((r * cos(a)).dp, (r * sin(a)).dp))
+        Box(Modifier.size(size)) {
+            Box(
+                Modifier
+                    .matchParentSize()
+                    .clip(CircleShape)
+                    .background(Color.Black.copy(alpha = 0.55f))
+                    .border(1.dp, colors.metallic(), CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                CenterView(group.center, size * 0.42f)
+                val shown = group.appKeys.take(6)
+                shown.forEachIndexed { i, key ->
+                    val a = -Math.PI / 2 + i * 2 * Math.PI / shown.size.coerceAtLeast(1)
+                    val r = size.value * 0.34f
+                    AppIcon(key, size * 0.26f, icons, Modifier.offset((r * cos(a)).dp, (r * sin(a)).dp))
+                }
             }
+            if (badge != null) Box(Modifier.align(Alignment.TopStart).offset((-12).dp, (-12).dp)) { badge() }
         }
         if (icons.showLabels) {
             Spacer(Modifier.height(4.dp))

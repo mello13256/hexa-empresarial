@@ -10,8 +10,10 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -95,5 +97,35 @@ class HomeFlowTest {
         rule.onNodeWithContentDescription("Fechar a gaveta").performClick()
         rule.waitForIdle()
         rule.onAllNodes(hasContentDescription("Grelha")).assertCountEquals(0)
+    }
+
+    private fun hasSearchBar() = rule.activity.container.state.value.home.pages.any { p -> p.items.any { it is SearchBarItem } }
+
+    @Test
+    fun editModeRemovesWithUndoAndEndsCleanly() {
+        waitForHome()
+        // Long press on the search bar, then "Editar ecrã inicial" from its menu.
+        rule.onAllNodes(hasText("Pesquisar aplicações")).onFirst().performTouchInput { longClick() }
+        rule.onNodeWithText("Editar ecrã inicial").performClick()
+        rule.waitForIdle()
+        // Edit tools with labels at the bottom, page controls at the top.
+        listOf("Adicionar widget", "Novo grupo", "Adicionar página", "Concluir").forEach {
+            rule.onNode(hasContentDescription(it)).assertIsDisplayed()
+        }
+        rule.onNodeWithText("Página 1 de 2").assertIsDisplayed()
+
+        // The badge removes the element; "Anular" brings it back.
+        rule.onNode(hasContentDescription("Remover Barra de pesquisa")).performClick()
+        rule.waitForIdle()
+        assertFalse(hasSearchBar())
+        rule.waitUntil(5_000) { rule.onAllNodes(hasText("Anular")).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithText("Anular").performClick()
+        rule.waitForIdle()
+        assertTrue(hasSearchBar())
+
+        rule.onNode(hasContentDescription("Concluir")).performClick()
+        rule.waitForIdle()
+        rule.onAllNodes(hasContentDescription("Adicionar widget")).assertCountEquals(0)
+        rule.onAllNodes(hasContentDescription("Remover Barra de pesquisa")).assertCountEquals(0)
     }
 }

@@ -68,7 +68,7 @@ fun polygon(center: Offset, radius: Float, sides: Int, rotation: Double): Path =
 }
 
 /** Small UI glyphs drawn in a [size]-sized box. */
-enum class Glyph { SEARCH, GRID, ORBIT, SETTINGS, CLOSE, PLUS, EDIT, WIDGET, GROUP, CHECK, TRASH, PAGE }
+enum class Glyph { SEARCH, GRID, ORBIT, SETTINGS, CLOSE, PLUS, EDIT, WIDGET, GROUP, CHECK, TRASH, PAGE, ARROW_LEFT, ARROW_RIGHT, HOME, INFO, STAR, DOCK, HIDE }
 
 fun DrawScope.drawGlyph(glyph: Glyph, color: Color) {
     val s = size.minDimension
@@ -134,6 +134,44 @@ fun DrawScope.drawGlyph(glyph: Glyph, color: Color) {
             drawRoundRect(color, p(0.22f, 0.12f), androidx.compose.ui.geometry.Size(s * 0.56f, s * 0.76f), androidx.compose.ui.geometry.CornerRadius(s * 0.08f), style = Stroke(w))
             drawLine(color, p(0.5f, 0.38f), p(0.5f, 0.62f), w, StrokeCap.Round)
             drawLine(color, p(0.38f, 0.5f), p(0.62f, 0.5f), w, StrokeCap.Round)
+        }
+        Glyph.ARROW_LEFT, Glyph.ARROW_RIGHT -> {
+            val d = if (glyph == Glyph.ARROW_LEFT) 1f else -1f
+            drawLine(color, p(0.5f + 0.12f * d, 0.24f), p(0.5f - 0.14f * d, 0.5f), w * 1.2f, StrokeCap.Round)
+            drawLine(color, p(0.5f - 0.14f * d, 0.5f), p(0.5f + 0.12f * d, 0.76f), w * 1.2f, StrokeCap.Round)
+        }
+        Glyph.HOME -> {
+            drawLine(color, p(0.16f, 0.5f), p(0.5f, 0.2f), w, StrokeCap.Round)
+            drawLine(color, p(0.5f, 0.2f), p(0.84f, 0.5f), w, StrokeCap.Round)
+            drawRoundRect(color, p(0.27f, 0.44f), androidx.compose.ui.geometry.Size(s * 0.46f, s * 0.38f), androidx.compose.ui.geometry.CornerRadius(s * 0.05f), style = Stroke(w))
+        }
+        Glyph.INFO -> {
+            drawCircle(color, s * 0.38f, p(0.5f, 0.5f), style = Stroke(w))
+            drawCircle(color, s * 0.055f, p(0.5f, 0.32f))
+            drawLine(color, p(0.5f, 0.46f), p(0.5f, 0.7f), w * 1.1f, StrokeCap.Round)
+        }
+        Glyph.STAR -> {
+            val star = Path()
+            for (i in 0 until 10) {
+                val a = -PI / 2 + i * PI / 5
+                val r = if (i % 2 == 0) 0.4f else 0.17f
+                val pt = p(0.5f + r * cos(a).toFloat(), 0.53f + r * sin(a).toFloat())
+                if (i == 0) star.moveTo(pt.x, pt.y) else star.lineTo(pt.x, pt.y)
+            }
+            star.close()
+            drawPath(star, color, style = Stroke(w * 0.9f))
+        }
+        Glyph.DOCK -> {
+            drawRoundRect(color, p(0.1f, 0.56f), androidx.compose.ui.geometry.Size(s * 0.8f, s * 0.26f), androidx.compose.ui.geometry.CornerRadius(s * 0.13f), style = Stroke(w))
+            for (i in 0..2) drawCircle(color, s * 0.05f, p(0.32f + i * 0.18f, 0.69f))
+            drawLine(color, p(0.5f, 0.16f), p(0.5f, 0.42f), w, StrokeCap.Round)
+            drawLine(color, p(0.38f, 0.3f), p(0.5f, 0.42f), w, StrokeCap.Round)
+            drawLine(color, p(0.62f, 0.3f), p(0.5f, 0.42f), w, StrokeCap.Round)
+        }
+        Glyph.HIDE -> {
+            drawOval(color, p(0.12f, 0.32f), androidx.compose.ui.geometry.Size(s * 0.76f, s * 0.36f), style = Stroke(w))
+            drawCircle(color, s * 0.08f, p(0.5f, 0.5f))
+            drawLine(color, p(0.2f, 0.8f), p(0.8f, 0.2f), w, StrokeCap.Round)
         }
     }
 }

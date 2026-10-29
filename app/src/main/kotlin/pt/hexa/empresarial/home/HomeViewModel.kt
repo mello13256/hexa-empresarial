@@ -50,7 +50,8 @@ interface HomeHost {
 }
 
 /** A message shown briefly at the bottom of the screen (string resource + optional argument). */
-data class UiMessage(@StringRes val text: Int, val arg: String? = null)
+/** A short message; with [undoToken] it offers to undo the change it reports (see [HomeViewModel.undo]). */
+data class UiMessage(@StringRes val text: Int, val arg: String? = null, val undoToken: Long? = null)
 
 /** Where a context menu was opened from. */
 enum class MenuSource { HOME, DOCK, DRAWER, ORBITAL, GROUP }
@@ -210,6 +211,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun onStop() {
+        commitUndo()
         if (resetOnStop) {
             resetOnStop = false
             menu = null
@@ -308,10 +310,50 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     fun removeItem(itemId: String) {
         closeMenu()
-        val found = HomeGrid.find(state.value.home, itemId)?.second
-        if (found is WidgetItem && !found.needsRestore) c.widgets.delete(found.appWidgetId)
+        val before = state.value.home
+        val (page, found) = HomeGrid.find(before, itemId) ?: return
         update { it.copy(home = HomeGrid.remove(it.home, itemId)) }
         if (selectedWidget == itemId) selectedWidget = null
+        offerUndo(R.string.msg_item_removed, before, page, found, listOfNotNull((found as? WidgetItem)?.takeIf { !it.needsRestore }?.appWidgetId))
+    }
+
+    // ---- undo of removals -------------------------------------------------------------------
+
+    /** The last removal, while its message is on screen. Its widgets are released only afterwards. */
+    private class PendingUndo(val token: Long, val before: HomeLayout, val after: HomeLayout, val page: Int, val item: HomeItem?, val widgetIds: List<Int>)
+
+    private var pendingUndo: PendingUndo? = null
+
+    private fun offerUndo(@StringRes text: Int, before: HomeLayout, page: Int, item: HomeItem?, widgetIds: List<Int>) {
+        commitUndo()
+        val token = System.nanoTime()
+        pendingUndo = PendingUndo(token, before, state.value.home, page, item, widgetIds)
+        _messages.tryEmit(UiMessage(text, undoToken = token))
+    }
+
+    /** Puts back what the message with [token] removed. */
+    fun undo(token: Long) {
+        val u = pendingUndo?.takeIf { it.token == token } ?: return
+        pendingUndo = null
+        val current = state.value.home
+        val restored = when {
+            // Nothing else changed: the exact previous layout comes back.
+            current == u.after -> u.before
+            // Other edits happened meanwhile: only the removed element is placed again.
+            u.item != null -> (HomeGrid.add(current, u.page, u.item) as? GridResult.Ok)?.layout ?: return
+            else -> u.before
+        }
+        update { it.copy(home = restored) }
+    }
+
+    /** The message with [token] went away without undo: the removal becomes final. */
+    fun undoExpired(token: Long) {
+        if (pendingUndo?.token == token) commitUndo()
+    }
+
+    private fun commitUndo() {
+        pendingUndo?.widgetIds?.forEach { c.widgets.delete(it) }
+        pendingUndo = null
     }
 
     fun addPage() {
@@ -319,9 +361,11 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun removePage(index: Int) {
-        val page = state.value.home.pages.getOrNull(index) ?: return
-        page.items.filterIsInstance<WidgetItem>().filter { !it.needsRestore }.forEach { c.widgets.delete(it.appWidgetId) }
+        val before = state.value.home
+        val page = before.pages.getOrNull(index) ?: return
+        if (before.pages.size <= 1) return
         update { it.copy(home = HomeGrid.removePage(it.home, index)) }
+        offerUndo(R.string.msg_page_removed, before, index, null, page.items.filterIsInstance<WidgetItem>().filter { !it.needsRestore }.map { it.appWidgetId })
     }
 
     fun movePage(from: Int, to: Int) {

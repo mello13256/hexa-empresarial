@@ -33,6 +33,8 @@
     <string name="msg_widget_cancelled">O widget não foi adicionado.</string>
     <string name="msg_widget_not_allowed">É necessária autorização para adicionar este widget.</string>
     <string name="msg_widget_provider_missing">A aplicação deste widget já não está instalada.</string>
+    <string name="msg_item_removed">Removido do ecrã inicial.</string>
+    <string name="msg_page_removed">Página eliminada.</string>
 
     <!-- Ações -->
     <string name="action_add_page">Adicionar página</string>
@@ -70,12 +72,14 @@
     <string name="action_show">Mostrar</string>
     <string name="action_unfavorite">Remover dos favoritos</string>
     <string name="action_uninstall">Desinstalar</string>
+    <string name="action_undo">Anular</string>
 
     <!-- Acessibilidade (descrições) -->
     <string name="a11y_app_missing">%1$s (não instalada)</string>
     <string name="a11y_dock_empty">Posição livre da dock</string>
     <string name="a11y_page_indicator">Página %1$d de %2$d</string>
     <string name="a11y_resize_handle">Arrastar para redimensionar</string>
+    <string name="a11y_remove_item">Remover %1$s</string>
 
     <!-- Aplicações -->
     <string name="app_hidden_suffix">oculta</string>
@@ -95,7 +99,11 @@
     </plurals>
 
     <!-- Ecrã inicial -->
-    <string name="edit_mode_title">A editar o ecrã inicial</string>
+    <string name="edit_hint">Arraste para mover · toque num espaço vazio para terminar</string>
+    <string name="edit_tool_widget">Widget</string>
+    <string name="edit_tool_group">Grupo</string>
+    <string name="edit_tool_page">Página</string>
+    <string name="edit_tool_settings">Definições</string>
     <string name="item_clock">Relógio e data</string>
     <string name="item_search_bar">Barra de pesquisa</string>
     <string name="page_number">Página %1$d</string>

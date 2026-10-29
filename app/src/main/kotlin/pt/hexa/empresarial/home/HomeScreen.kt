@@ -27,8 +27,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -87,7 +89,6 @@ import pt.hexa.empresarial.theme.HexaTheme
 import pt.hexa.empresarial.ui.AppIcon
 import pt.hexa.empresarial.ui.AppPickerDialog
 import pt.hexa.empresarial.ui.Glyph
-import pt.hexa.empresarial.ui.GlyphButton
 import pt.hexa.empresarial.widgets.WidgetPickerDialog
 import kotlin.math.roundToInt
 
@@ -159,7 +160,20 @@ private fun HomeContent(vm: HomeViewModel, state: LauncherState) {
         }
     }
     LaunchedEffect(Unit) {
-        vm.messages.collect { m -> snackbar.showSnackbar(if (m.arg != null) context.getString(m.text, m.arg) else context.getString(m.text)) }
+        vm.messages.collect { m ->
+            val text = if (m.arg != null) context.getString(m.text, m.arg) else context.getString(m.text)
+            // A newer message replaces the one on screen instead of waiting behind it.
+            snackbar.currentSnackbarData?.dismiss()
+            launch {
+                val token = m.undoToken
+                if (token == null) {
+                    snackbar.showSnackbar(text)
+                } else {
+                    val result = snackbar.showSnackbar(text, actionLabel = context.getString(R.string.action_undo), duration = SnackbarDuration.Short)
+                    if (result == SnackbarResult.ActionPerformed) vm.undo(token) else vm.undoExpired(token)
+                }
+            }
+        }
     }
     SideEffect { (context as? HomeActivity)?.drawerVisible = drawer.value > 0f }
 
@@ -268,7 +282,8 @@ private fun HomeContent(vm: HomeViewModel, state: LauncherState) {
                 ),
         ) {
             if (state.appearance.logo == LogoPlacement.HOME_TOP) HexaLogo(Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp), size = 22.sp)
-            if (vm.editMode) EditBar(vm, pager.currentPage, pages.size, state.home.defaultPage)
+            // While dragging, the remove target takes the place of the page bar (kept for its height).
+            if (vm.editMode) EditPageBar(vm, pager.currentPage, pages.size, state.home.defaultPage, Modifier.alpha(if (drag != null) 0f else 1f))
             Box(Modifier.weight(1f).fillMaxWidth()) {
                 HorizontalPager(state = pager, beyondViewportPageCount = 1, modifier = Modifier.fillMaxSize(), key = { pages.getOrNull(it)?.id ?: it }) { index ->
                     val page = pages.getOrNull(index) ?: return@HorizontalPager
@@ -290,7 +305,7 @@ private fun HomeContent(vm: HomeViewModel, state: LauncherState) {
                     )
                 }
             }
-            PageIndicator(pages.size, pager.currentPage, state.home.defaultPage)
+            if (vm.editMode) EditTools(vm) else PageIndicator(pages.size, pager.currentPage, state.home.defaultPage)
             if (state.dock.enabled) {
                 Dock(
                     dock = state.dock,
@@ -449,7 +464,8 @@ private fun PageContent(
                 detectTapGestures(
                     onDoubleTap = { if (!vm.editMode) vm.perform(state.gestures.doubleTap) },
                     onLongPress = { vm.enterEdit() },
-                    onTap = { if (vm.editMode) vm.selectWidget(null) },
+                    // In edit mode a tap on empty space first deselects a widget, then ends editing.
+                    onTap = { if (vm.editMode) { if (vm.selectedWidget != null) vm.selectWidget(null) else vm.exitEdit() } },
                 )
             },
     ) {
@@ -460,12 +476,13 @@ private fun PageContent(
             grid.cellH = cellH
             vm.cellSizeDp = with(density) { cellW.toDp().value to cellH.toDp().value }
         }
-        if (vm.editMode) {
+        // The cell grid only appears while something is being dragged, to show where it can go.
+        if (drag != null) {
             val dash = remember { PathEffect.dashPathEffect(floatArrayOf(10f, 10f)) }
             Canvas(Modifier.fillMaxSize()) {
                 for (x in 0 until home.columns) for (y in 0 until home.rows) {
                     drawRoundRect(
-                        colors.onWallpaper.copy(alpha = 0.18f),
+                        colors.onWallpaper.copy(alpha = 0.14f),
                         topLeft = Offset(x * cellW + 4f, y * cellH + 4f),
                         size = androidx.compose.ui.geometry.Size(cellW - 8f, cellH - 8f),
                         cornerRadius = androidx.compose.ui.geometry.CornerRadius(16f),
@@ -486,12 +503,22 @@ private fun PageContent(
                 val gestures = Modifier.itemGestures(
                     key = item.id,
                     onTap = { bounds ->
-                        when (item) {
-                            is AppItem -> if (vm.editMode) vm.showAppMenu(item.appKey, MenuSource.HOME, bounds, item.id) else vm.launch(item.appKey, bounds)
-                            is GroupItem -> vm.openGroup(item.groupId, bounds)
-                            is ClockItem -> (context as? HomeActivity)?.startIntent(Intent(AlarmClock.ACTION_SHOW_ALARMS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                            is SearchBarItem -> vm.openDrawer(null, true)
-                            is WidgetItem -> vm.selectWidget(item.id)
+                        // In edit mode a tap never opens anything by accident: it only edits groups
+                        // and selects widgets for resizing.
+                        if (vm.editMode) {
+                            when (item) {
+                                is GroupItem -> vm.editGroup(item.groupId)
+                                is WidgetItem -> vm.selectWidget(item.id)
+                                else -> Unit
+                            }
+                        } else {
+                            when (item) {
+                                is AppItem -> vm.launch(item.appKey, bounds)
+                                is GroupItem -> vm.openGroup(item.groupId, bounds)
+                                is ClockItem -> (context as? HomeActivity)?.startIntent(Intent(AlarmClock.ACTION_SHOW_ALARMS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                is SearchBarItem -> vm.openDrawer(null, true)
+                                is WidgetItem -> Unit
+                            }
                         }
                     },
                     onLongPress = { bounds ->
@@ -501,11 +528,19 @@ private fun PageContent(
                     onDrag = onDrag,
                     onDragEnd = onDragEnd,
                 )
+                val badge: (@Composable () -> Unit)? = if (vm.editMode && !dragged) {
+                    { RemoveBadge(itemLabel(item, state, catalog), { vm.removeItem(item.id) }) }
+                } else {
+                    null
+                }
                 when (item) {
-                    is AppItem -> AppCell(item.appKey, catalog.label(item.appKey) ?: item.label, state.icons, missing = catalog.loaded && catalog.resolve(item.appKey) == null, modifier = gestures)
-                    is GroupItem -> state.group(item.groupId)?.let { GroupCell(it, state.icons, gestures) }
+                    is AppItem -> AppCell(
+                        item.appKey, catalog.label(item.appKey) ?: item.label, state.icons,
+                        missing = catalog.loaded && catalog.resolve(item.appKey) == null, modifier = gestures, badge = badge,
+                    )
+                    is GroupItem -> state.group(item.groupId)?.let { GroupCell(it, state.icons, gestures, badge) }
                     is ClockItem -> ClockCell(state.clock, state.appearance.surfaceOpacity, gestures)
-                    is SearchBarItem -> SearchBarCell(state.appearance.surfaceOpacity, onClick = { vm.openDrawer(null, true) }, modifier = gestures)
+                    is SearchBarItem -> SearchBarCell(state.appearance.surfaceOpacity, onClick = { if (!vm.editMode) vm.openDrawer(null, true) }, modifier = gestures)
                     is WidgetItem -> {
                         val wDp = with(density) { (c.w * cellW).toDp().value }
                         val hDp = with(density) { (c.h * cellH).toDp().value }
@@ -527,6 +562,8 @@ private fun PageContent(
                         }
                     }
                 }
+                // Apps and groups carry the badge on their icon; larger elements on their corner.
+                if (badge != null && item !is AppItem && item !is GroupItem) Box(Modifier.align(Alignment.TopStart)) { badge() }
             }
         }
         // Drop preview on the current page.
@@ -570,70 +607,54 @@ private fun PageIndicator(count: Int, current: Int, defaultPage: Int) {
     }
 }
 
-/** Edit mode bar: what can be added and how the current page is managed. */
+/** Name of a home element, for accessibility labels. */
 @Composable
-private fun EditBar(vm: HomeViewModel, page: Int, pageCount: Int, defaultPage: Int) {
-    val colors = HexaTheme.colors
-    val shape = RoundedCornerShape(HexaTheme.tokens.radiusLarge)
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp)
-            .background(Color.Black.copy(alpha = 0.72f), shape)
-            .border(1.dp, colors.accent.copy(alpha = 0.6f), shape)
-            .padding(8.dp),
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(stringResource(R.string.edit_mode_title), color = Color.White, modifier = Modifier.weight(1f).padding(start = 8.dp))
-            TextButton(onClick = vm::exitEdit) { Text(stringResource(R.string.action_done), color = colors.accent) }
-        }
-        Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-            GlyphButton(Glyph.WIDGET, stringResource(R.string.action_add_widget), vm::openWidgetPicker, tint = Color.White)
-            GlyphButton(Glyph.GROUP, stringResource(R.string.action_new_group), { vm.editGroup(null) }, tint = Color.White)
-            GlyphButton(Glyph.PAGE, stringResource(R.string.action_add_page), vm::addPage, tint = Color.White)
-            GlyphButton(Glyph.SETTINGS, stringResource(R.string.settings_title), { vm.host?.openSettings() }, tint = Color.White)
-        }
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            TextButton(onClick = { vm.movePage(page, page - 1) }, enabled = page > 0) { Text(stringResource(R.string.page_move_left), color = Color.White) }
-            TextButton(onClick = { vm.setDefaultPage(page) }, enabled = page != defaultPage) {
-                Text(stringResource(if (page == defaultPage) R.string.page_is_default else R.string.page_make_default), color = Color.White)
-            }
-            TextButton(onClick = { vm.removePage(page) }, enabled = pageCount > 1) { Text(stringResource(R.string.page_delete), color = colors.danger) }
-            TextButton(onClick = { vm.movePage(page, page + 1) }, enabled = page < pageCount - 1) { Text(stringResource(R.string.page_move_right), color = Color.White) }
-        }
-    }
+private fun itemLabel(item: HomeItem, state: LauncherState, catalog: CatalogSnapshot): String = when (item) {
+    is AppItem -> catalog.label(item.appKey) ?: item.label
+    is GroupItem -> state.group(item.groupId)?.name ?: stringResource(R.string.group_default_name)
+    is ClockItem -> stringResource(R.string.item_clock)
+    is SearchBarItem -> stringResource(R.string.item_search_bar)
+    is WidgetItem -> item.label.ifEmpty { stringResource(R.string.widget_generic) }
 }
 
-/** Context menu for an app (home, dock, drawers, groups). */
+/** Context menu for an app (home, dock, drawers, groups): only what makes sense where it was opened. */
 @Composable
 private fun AppMenu(vm: HomeViewModel, target: MenuTarget.App, state: LauncherState, catalog: CatalogSnapshot) {
     val key = target.appKey
     val label = catalog.label(key) ?: ""
+    val source = target.source
+    val inDrawer = source == MenuSource.DRAWER || source == MenuSource.ORBITAL
     var groupPicker by remember { mutableStateOf(false) }
     val entries = buildList {
-        target.shortcuts.forEach { s -> add(MenuEntry(s.label) { vm.launchShortcut(s, target.anchor) }) }
-        add(MenuEntry(stringResource(R.string.action_app_info)) { vm.appInfo(key) })
-        if (target.source != MenuSource.HOME) add(MenuEntry(stringResource(R.string.action_add_to_home)) { vm.addAppToHome(key, label) })
-        if (target.source != MenuSource.DOCK) add(MenuEntry(stringResource(R.string.action_add_to_dock)) { vm.addToDock(key) })
-        if (state.groups.isNotEmpty()) add(MenuEntry(stringResource(R.string.action_add_to_group)) { groupPicker = true })
-        val fav = key in state.apps.favorites
-        add(MenuEntry(stringResource(if (fav) R.string.action_unfavorite else R.string.action_favorite)) { vm.toggleFavorite(key) })
-        if (target.source == MenuSource.ORBITAL) {
-            add(MenuEntry(stringResource(R.string.action_orbit_closer)) { vm.nudgeOrbital(key, -1, vm.orbitalOrder) })
-            add(MenuEntry(stringResource(R.string.action_orbit_further)) { vm.nudgeOrbital(key, 1, vm.orbitalOrder) })
+        target.shortcuts.take(MAX_MENU_SHORTCUTS).forEach { s -> add(MenuEntry(s.label) { vm.launchShortcut(s, target.anchor) }) }
+        if (source != MenuSource.HOME) add(MenuEntry(stringResource(R.string.action_add_to_home), glyph = Glyph.HOME) { vm.addAppToHome(key, label) })
+        if (source != MenuSource.DOCK) add(MenuEntry(stringResource(R.string.action_add_to_dock), glyph = Glyph.DOCK) { vm.addToDock(key) })
+        if (state.groups.isNotEmpty() && source != MenuSource.GROUP) add(MenuEntry(stringResource(R.string.action_add_to_group), glyph = Glyph.GROUP) { groupPicker = true })
+        if (inDrawer) {
+            val fav = key in state.apps.favorites
+            add(MenuEntry(stringResource(if (fav) R.string.action_unfavorite else R.string.action_favorite), glyph = Glyph.STAR) { vm.toggleFavorite(key) })
         }
-        if (target.source == MenuSource.DRAWER || target.source == MenuSource.ORBITAL) add(MenuEntry(stringResource(R.string.action_hide_app)) { vm.hideApp(key) })
-        if (target.source == MenuSource.HOME && target.itemId != null) add(MenuEntry(stringResource(R.string.action_remove), danger = true) { vm.removeItem(target.itemId) })
-        if (target.source == MenuSource.DOCK && target.dockSlot != null) add(MenuEntry(stringResource(R.string.action_remove_from_dock), danger = true) { vm.closeMenu(); vm.setDockSlot(target.dockSlot, null) })
-        add(MenuEntry(stringResource(R.string.action_uninstall), danger = true) { vm.uninstall(key) })
+        if (source == MenuSource.ORBITAL) {
+            add(MenuEntry(stringResource(R.string.action_orbit_closer), glyph = Glyph.ORBIT) { vm.nudgeOrbital(key, -1, vm.orbitalOrder) })
+            add(MenuEntry(stringResource(R.string.action_orbit_further), glyph = Glyph.ORBIT) { vm.nudgeOrbital(key, 1, vm.orbitalOrder) })
+        }
+        if (inDrawer) add(MenuEntry(stringResource(R.string.action_hide_app), glyph = Glyph.HIDE) { vm.hideApp(key) })
+        add(MenuEntry(stringResource(R.string.action_app_info), glyph = Glyph.INFO) { vm.appInfo(key) })
+        if (source == MenuSource.HOME && target.itemId != null) add(MenuEntry(stringResource(R.string.action_remove), danger = true, glyph = Glyph.CLOSE) { vm.removeItem(target.itemId) })
+        if (source == MenuSource.DOCK && target.dockSlot != null) add(MenuEntry(stringResource(R.string.action_remove_from_dock), danger = true, glyph = Glyph.CLOSE) { vm.closeMenu(); vm.setDockSlot(target.dockSlot, null) })
+        add(MenuEntry(stringResource(R.string.action_uninstall), danger = true, glyph = Glyph.TRASH) { vm.uninstall(key) })
     }
     if (!groupPicker) {
-        ContextMenuOverlay(target, entries, label, vm::closeMenu)
+        ContextMenuOverlay(target, entries, label, vm::closeMenu, icon = { AppIcon(key, 32.dp, state.icons) })
     } else {
         ContextMenuOverlay(
             target,
-            state.groups.map { g -> MenuEntry(g.name) { vm.addAppToGroup(g.id, key) } },
-            androidx.compose.ui.res.stringResource(R.string.action_add_to_group),
-        ) { groupPicker = false; vm.closeMenu() }
+            state.groups.map { g -> MenuEntry(g.name, glyph = Glyph.GROUP) { vm.addAppToGroup(g.id, key) } },
+            stringResource(R.string.action_add_to_group),
+            { groupPicker = false; vm.closeMenu() },
+        )
     }
 }
+
+/** Android shows at most four shortcuts in a launcher menu; more only make it longer. */
+private const val MAX_MENU_SHORTCUTS = 4
