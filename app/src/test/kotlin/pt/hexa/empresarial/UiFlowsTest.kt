@@ -107,7 +107,20 @@ class HomeFlowTest {
             rule.onNode(hasContentDescription("Grelha")).performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.OnClick)
             rule.waitForIdle()
             val afterSemantics = rule.activity.container.state.value.drawer.view
-            org.junit.Assert.fail("toque=$afterTouch actividade=$started semantica=$afterSemantics\n" + screen())
+            val vm = androidx.lifecycle.ViewModelProvider(rule.activity)[pt.hexa.empresarial.home.HomeViewModel::class.java]
+            val same = vm.c === rule.activity.container
+            var direct: DrawerView? = null
+            rule.runOnUiThread {
+                vm.setDrawerView(DrawerView.GRID)
+                direct = rule.activity.container.state.value.drawer.view
+            }
+            val afterIdle = rule.activity.container.state.value.drawer.view
+            rule.waitForIdle()
+            val afterIdle2 = rule.activity.container.state.value.drawer.view
+            org.junit.Assert.fail(
+                "toque=$afterTouch actividade=$started semantica=$afterSemantics mesmo=$same direto=$direct " +
+                    "depois=$afterIdle depoisIdle=$afterIdle2 estado=${rule.activity.container.state.value.drawer}\n" + screen(),
+            )
         }
         rule.onNode(hasContentDescription("Orbital")).performClick()
         rule.waitForIdle()
